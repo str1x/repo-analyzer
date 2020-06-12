@@ -4,9 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "install": "electron-build-env neon build --release",
-    "start": "electron .",
-    "clean": "neon clean"
+    "build-native": "electron-build-env neon build --release",
+    "build-main": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.main.babel.js --colors",
+    "build-renderer": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.renderer.babel.js --colors",
+    "build": "concurrently 'npm run build-main' 'npm run build-renderer'",
+    "clean-native-build": "neon clean",
+    "start": "electron app/main.build.js"
   },
   "repository": {
     "type": "git",
@@ -19,10 +22,32 @@
   },
   "homepage": "https://github.com/str1x/repo-analyzer#readme",
   "dependencies": {
-    "electron": "^9.0.2"
+    "electron-log": "^4.2.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/preset-react": "^7.10.1",
+    "@babel/register": "^7.10.1",
+    "babel-loader": "^8.1.0",
+    "concurrently": "^5.2.0",
+    "core-js": "^3.6.5",
+    "cross-env": "^7.0.2",
+    "css-loader": "^3.5.3",
+    "electron": "^9.0.2",
+    "electron-build-env": "^0.2.0",
+    "electron-devtools-installer": "^3.0.0",
+    "mini-css-extract-plugin": "^0.9.0",
     "neon-cli": "^0.4.0",
-    "electron-build-env": "^0.2.0"
+    "node-sass": "^4.14.1",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "sass-loader": "^8.0.2",
+    "terser-webpack-plugin": "^3.0.3",
+    "webpack": "^4.43.0",
+    "webpack-bundle-analyzer": "^3.8.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-merge": "^4.2.2"
   }
 }
