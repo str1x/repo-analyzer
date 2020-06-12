@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/str1x/repo-analyzer#readme",
   "dependencies": {
+    "electron": "^9.0.2",
     "electron-log": "^4.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
@@ -36,9 +37,14 @@
     "core-js": "^3.6.5",
     "cross-env": "^7.0.2",
     "css-loader": "^3.5.3",
-    "electron": "^9.0.2",
     "electron-build-env": "^0.2.0",
     "electron-devtools-installer": "^3.0.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.20.0",
+    "eslint-plugin-react-hooks": "^2.5.0",
     "mini-css-extract-plugin": "^0.9.0",
     "neon-cli": "^0.4.0",
     "node-sass": "^4.14.1",

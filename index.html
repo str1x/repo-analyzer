@@ -1,22 +1,22 @@
  
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Electron, meet Neon!</title>
-  </head>
-  <body>
-    <script>
-      try {
-        const ipcRenderer = require('electron').ipcRenderer;
-        ipcRenderer.on('store-data', (e, arg) => {
-            console.log(arg);
-        });
-      } catch (e) {
-        document.write(`<pre>${e.stack}</pre>`);
-      }
-    </script>
+    <head>
+        <meta charset="UTF-8">
+        <title>Electron, meet Neon!</title>
+    </head>
+    <body>
+        <script>
+            try {
+                const ipcRenderer = require('electron').ipcRenderer;
+                ipcRenderer.on('store-data', (e, arg) => {
+                    console.log(arg);
+                });
+            } catch (e) {
+                document.write(`<pre>${e.stack}</pre>`);
+            }
+        </script>
 
-    <p>If the title &uarr; says "hello world!" then we're good &#x1f60a;</p>
-  </body>
+        <p>If the title &uarr; says "hello world!" then we're good &#x1f60a;</p>
+    </body>
 </html>
