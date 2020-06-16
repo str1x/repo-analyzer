@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { render } from 'react-dom';
-import './app.global.scss';
+import { AppContainer as ReactHotAppContainer } from 'react-hot-loader';
+import App from './containers/App';
+
+const isDev = process.env.NODE_ENV === 'development';
+const AppContainer = isDev ? ReactHotAppContainer : Fragment;
 
 document.addEventListener('DOMContentLoaded', () => render(
-    <div>
-        Test react
-    </div>,
+    <AppContainer>
+        <App />
+    </AppContainer>,
     document.getElementById('root'),
 ));

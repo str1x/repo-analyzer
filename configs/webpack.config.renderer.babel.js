@@ -1,24 +1,35 @@
+/* eslint-disable no-console */
 /**
  * Build config for electron renderer process
  */
 
 import path from 'path';
 import webpack from 'webpack';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-// import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import merge from 'webpack-merge';
-// import TerserPlugin from 'terser-webpack-plugin';
+import { spawn } from 'child_process';
+import TerserPlugin from 'terser-webpack-plugin';
 import baseConfig from './webpack.config.base';
+
+const isDev = process.env.NODE_ENV === 'development';
+const devPort = process.env.PORT || 1212;
+const devPublicPath = `http://localhost:${devPort}/dist`;
 
 export default merge.smart(baseConfig, {
     devtool: 'source-map',
 
-    mode: 'development',
+    mode: isDev ? 'development' : 'production',
 
     target: 'electron-preload',
 
-    entry: path.join(__dirname, '..', 'app/index.jsx'),
+    entry: [
+        ...isDev ? [
+            'react-hot-loader/patch',
+            `webpack-dev-server/client?http://localhost:${devPort}/`,
+            'webpack/hot/only-dev-server',
+        ] : [],
+        path.join(__dirname, '..', 'app/index.jsx'),
+    ],
 
     output: {
         path: path.join(__dirname, '..', 'app/dist'),
@@ -26,91 +37,16 @@ export default merge.smart(baseConfig, {
         filename: 'renderer.build.js',
     },
 
+    resolve: {
+        alias: {
+            ...isDev ? {
+                'react-dom': '@hot-loader/react-dom',
+            } : {},
+        },
+    },
+
     module: {
         rules: [
-            // Extract all .global.css to style.css as is
-            {
-                test: /\.global\.css$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            publicPath: './',
-                        },
-                    },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: true,
-                        },
-                    },
-                ],
-            },
-            // Pipe other styles through css modules and append to style.css
-            {
-                test: /^((?!\.global).)*\.css$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                    },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: {
-                                localIdentName: '[name]__[local]__[hash:base64:5]',
-                            },
-                            sourceMap: true,
-                        },
-                    },
-                ],
-            },
-            // Add SASS support  - compile all .global.scss files and pipe it to style.css
-            {
-                test: /\.global\.(scss|sass)$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                    },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: true,
-                            importLoaders: 1,
-                        },
-                    },
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            sourceMap: true,
-                        },
-                    },
-                ],
-            },
-            // Add SASS support  - compile all other .scss files and pipe it to style.css
-            {
-                test: /^((?!\.global).)*\.(scss|sass)$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                    },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: {
-                                localIdentName: '[name]__[local]__[hash:base64:5]',
-                            },
-                            importLoaders: 1,
-                            sourceMap: true,
-                        },
-                    },
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            sourceMap: true,
-                        },
-                    },
-                ],
-            },
             // WOFF Font
             {
                 test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
@@ -169,21 +105,13 @@ export default merge.smart(baseConfig, {
     },
 
     optimization: {
-        // minimizer: [
-        //     new TerserPlugin({
-        //       parallel: true,
-        //       sourceMap: true,
-        //       cache: true
-        //     }),
-        //     new OptimizeCSSAssetsPlugin({
-        //       cssProcessorOptions: {
-        //         map: {
-        //           inline: false,
-        //           annotation: true
-        //         }
-        //       }
-        //     })
-        //   ]
+        minimizer: [
+            new TerserPlugin({
+                parallel: true,
+                sourceMap: true,
+                cache: true,
+            }),
+        ],
     },
 
     plugins: [
@@ -197,16 +125,50 @@ export default merge.smart(baseConfig, {
          * development checks
          */
         new webpack.EnvironmentPlugin({
-            NODE_ENV: 'development',
-        }),
-
-        new MiniCssExtractPlugin({
-            filename: 'style.css',
+            NODE_ENV: isDev ? 'development' : 'production',
         }),
 
         new BundleAnalyzerPlugin({
             analyzerMode: 'disabled',
             openAnalyzer: false,
         }),
+
+        ...isDev ? [
+            new webpack.HotModuleReplacementPlugin({
+                multiStep: true,
+            }),
+        ] : [],
     ],
+
+    devServer: {
+        port: devPort,
+        publicPath: devPublicPath,
+        compress: true,
+        noInfo: false,
+        stats: 'errors-only',
+        inline: true,
+        lazy: false,
+        hot: true,
+        headers: { 'Access-Control-Allow-Origin': '*' },
+        contentBase: path.join(__dirname, 'dist'),
+        watchOptions: {
+            aggregateTimeout: 300,
+            ignored: /node_modules/,
+            poll: 100,
+        },
+        historyApiFallback: {
+            verbose: true,
+            disableDotRule: false,
+        },
+        before() {
+            console.log('Starting Main Process...');
+            spawn('npm', ['run', 'start-main-dev'], {
+                shell: true,
+                env: process.env,
+                stdio: 'inherit',
+            })
+                .on('close', (code) => process.exit(code))
+                .on('error', (spawnError) => console.error(spawnError));
+        },
+    },
 });
