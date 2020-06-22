@@ -8,5 +8,15 @@
     "env": {
         "browser": true,
         "node": true
+    },
+    "settings": {
+        "import/resolver": {
+            "alias": {
+                "map": [
+                    ["@app", "./app"]
+                ],
+                "extensions": [".js", ".jsx"]
+            }
+        }
     }
 }

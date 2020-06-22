@@ -25,6 +25,7 @@ const createWindow = async () => {
     });
 
     mainWindow.loadURL(`file://${__dirname}/app.html`);
+    // mainWindow.setMenuBarVisibility(false);
 
     // @TODO: Use 'ready-to-show' event
     //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
@@ -41,6 +42,9 @@ const createWindow = async () => {
         mainWindow = null;
     });
 };
+
+// enable native modules in renderer
+app.allowRendererProcessReuse = false;
 
 /**
  * Add event listeners...
