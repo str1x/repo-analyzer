@@ -3,7 +3,8 @@
     "rules": {
         "indent": ["warn", 4],
         "react/jsx-indent": ["warn", 4],
-        "max-len": ["warn", 120]
+        "max-len": ["warn", 120],
+        "import/prefer-default-export": "off"
     },
     "env": {
         "browser": true,
@@ -13,7 +14,7 @@
         "import/resolver": {
             "alias": {
                 "map": [
-                    ["@app", "./app"]
+                    ["app", "./app"]
                 ],
                 "extensions": [".js", ".jsx"]
             }

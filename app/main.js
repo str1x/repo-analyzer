@@ -6,6 +6,7 @@
 import path from 'path';
 import { app, BrowserWindow } from 'electron';
 // import log from 'electron-log';
+const isDev = process.env.NODE_ENV === 'development';
 
 let mainWindow = null;
 
@@ -14,18 +15,16 @@ const createWindow = async () => {
         show: false,
         width: 1024,
         height: 728,
-        webPreferences:
-            process.env.NODE_ENV === 'development'
-                ? {
-                    nodeIntegration: true,
-                }
-                : {
-                    preload: path.join(__dirname, 'dist/renderer.prod.js'),
-                },
+        webPreferences: {
+            enableRemoteModule: true,
+            nodeIntegration: true,
+            ...isDev ? {
+                preload: path.join(__dirname, 'dist/renderer.build.js'),
+            } : {},
+        },
     });
 
     mainWindow.loadURL(`file://${__dirname}/app.html`);
-    // mainWindow.setMenuBarVisibility(false);
 
     // @TODO: Use 'ready-to-show' event
     //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event

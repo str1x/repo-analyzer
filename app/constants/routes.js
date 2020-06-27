@@ -1,2 +1,3 @@
-export const REPOSITORY_LIST = '/';
-export const REPOSITORY = '/repsitory';
+export const REPOSITORY = '/';
+export const CONTRIBUTORS = '/contributors';
+export const FILES = '/files';

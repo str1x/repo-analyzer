@@ -42,7 +42,7 @@ export default merge.smart(baseConfig, {
             ...isDev ? {
                 'react-dom': '@hot-loader/react-dom',
             } : {},
-            '@app': path.join(__dirname, '..', 'app'),
+            app: path.join(__dirname, '..', 'app'),
         },
     },
 

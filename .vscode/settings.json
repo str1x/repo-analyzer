@@ -1,6 +1,6 @@
 {
     "path-intellisense.extensionOnImport": false,
     "path-intellisense.mappings": {
-        "@app": "${workspaceRoot}/app"
+        "app": "${workspaceRoot}/app"
     }
 }
