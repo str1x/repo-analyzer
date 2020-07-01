@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build-native-dev": "electron-build-env neon build",
     "build-native": "electron-build-env neon build --release",
     "build-main": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.main.babel.js --colors",
     "build-renderer": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.renderer.babel.js --colors",

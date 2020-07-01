@@ -18,9 +18,9 @@ const createWindow = async () => {
         webPreferences: {
             enableRemoteModule: true,
             nodeIntegration: true,
-            ...isDev ? {
+            ...isDev ? {} : {
                 preload: path.join(__dirname, 'dist/renderer.build.js'),
-            } : {},
+            },
         },
     });
 

@@ -2,10 +2,13 @@ import { remote } from 'electron';
 
 const isDev = process.env.NODE_ENV === 'development';
 
-class Menu {
-    constructor() {
+export default class Menu {
+    constructor({
+        onRepositoryOpen = () => {},
+    }) {
         this.remote = remote;
         this.window = remote.getCurrentWindow();
+        this.onRepositoryOpen = onRepositoryOpen;
         this.create();
     }
 
@@ -16,8 +19,12 @@ class Menu {
                 {
                     label: 'Open Folder',
                     role: 'open',
-                    click: () => {
-                        this.remote.dialog.showOpenDialog(this.window, { properties: ['openDirectory'] });
+                    click: async () => {
+                        const { canceled, filePaths } = await this.remote.dialog.showOpenDialog(
+                            this.window,
+                            { properties: ['openDirectory'] },
+                        );
+                        this.onRepositoryOpen(canceled, filePaths[0]);
                     },
                 },
             ],
@@ -59,5 +66,3 @@ class Menu {
         this.remote.Menu.setApplicationMenu(menu);
     }
 }
-
-export default new Menu();
