@@ -9,7 +9,11 @@ fn hello(mut cx: FunctionContext) -> JsResult<JsString> {
 
 fn open_repository(mut cx: FunctionContext) -> JsResult<JsObject> {
     let path = cx.argument::<JsString>(0)?.value();
-    let repo = Repository::open(&path)?;
+    let repo = Repository::open(&path)
+        .or_else(|e| {
+            let message = cx.string(e);
+            cx.throw(message)
+        })?;
     let general_data = repo.get_general_data();
     let object = JsObject::new(&mut cx);
     let path_prop = cx.string(&general_data.path);

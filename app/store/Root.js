@@ -11,10 +11,16 @@ export default class Root {
     }
 
     onRepositoryOpen(canceled, path) {
-        const data = native.openRepository(path);
-        console.log(data);
-        if (!canceled) {
+        if (canceled) {
+            return;
+        }
+
+        try {
+            const data = native.openRepository(path);
+            console.log(data);
             this.repository.path = path;
+        } catch (err) {
+            console.warn(err);
         }
     }
 }

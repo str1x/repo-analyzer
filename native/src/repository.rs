@@ -12,19 +12,21 @@ pub struct RepoGeneralData {
 }
 
 pub enum Error {
-    FailedToOpen(String),
+    FailedToOpen,
 }
 
-impl From<Error> for neon::result::Throw {
-    fn from(error: Error) -> Self {
-        Self
+impl AsRef<str> for Error {
+    fn as_ref(&self) -> &str {
+        match self {
+            Error::FailedToOpen => "Repo not found",
+        }
     }
 }
 
 impl Repository {
     pub fn open(path: &String) -> Result<Repository, Error> {
         let inner_repo = git2::Repository::open(path)
-            .map_err(|_| Error::FailedToOpen("repo not found".to_string()))?;
+            .map_err(|_| Error::FailedToOpen)?;
 
         Ok(Repository {
             path: path.clone(),
