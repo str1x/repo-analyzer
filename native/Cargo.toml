@@ -16,5 +16,4 @@ neon-build = "0.4.0"
 
 [dependencies]
 neon = "0.4.0"
-git2 = "0.13.6"
-openssl = { version = "0.10", features = ["vendored"] }
+git_analyzer = { path = "lib/git_analyzer" }

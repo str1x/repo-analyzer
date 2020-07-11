@@ -46,6 +46,18 @@ impl Repository {
         return files;
     }
 
+    // pub fn get_contributors(&self) -> Vec<String> {
+    //     let index = self.inner_repo.index().unwrap();
+    //     let contributors = index
+    //         .iter()
+    //         .map(|item| {
+    //             String::from_utf8(item.path).unwrap()
+    //         })
+
+
+    //     return contributors;
+    // }
+
     pub fn get_general_data(&self) -> RepoGeneralData {
         return RepoGeneralData {
             path: self.path.clone(),

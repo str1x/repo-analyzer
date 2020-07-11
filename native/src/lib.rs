@@ -1,7 +1,7 @@
 use neon::prelude::*;
-pub mod repository;
+extern crate git_analyzer;
 
-use repository::{Repository};
+use git_analyzer::{Repository};
 
 fn hello(mut cx: FunctionContext) -> JsResult<JsString> {
     Ok(cx.string("hello node"))

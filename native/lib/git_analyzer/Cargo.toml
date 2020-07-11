@@ -1,0 +1,9 @@
+[package]
+name = "git_analyzer"
+version = "0.1.0"
+authors = ["Max Green <strixdevelop@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+git2 = "0.13.6"
+openssl = { version = "0.10", features = ["vendored"] }
