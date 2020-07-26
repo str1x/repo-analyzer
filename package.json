@@ -12,6 +12,7 @@
     "clean-native-build": "neon clean",
     "start-main-dev": "cross-env NODE_ENV=development electron -r @babel/register ./app/main.js",
     "start-renderer-dev": "cross-env NODE_ENV=development webpack-dev-server --config configs/webpack.config.renderer.babel.js",
+    "start-all-dev": "npm run build-native-dev && npm run start-renderer-dev",
     "start": "electron app/main.build.js"
   },
   "repository": {
