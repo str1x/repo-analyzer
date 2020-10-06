@@ -27,7 +27,7 @@
   "homepage": "https://github.com/str1x/repo-analyzer#readme",
   "dependencies": {
     "@hot-loader/react-dom": "^16.13.0",
-    "electron": "^9.0.2",
+    "electron": "^9.3.0",
     "electron-log": "^4.2.1",
     "history": "^5.0.0",
     "mobx": "^5.15.4",
